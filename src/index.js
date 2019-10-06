@@ -1,24 +1,24 @@
-const express = require('express');
-const mysql   = require('mysql');
-const routes  = require('./routes/api');
+const express       = require('express');
+const tasksRouter   = require('./routes/tasks');
+const userRouter    = require('./routes/users');
+const proRouter     = require('./routes/projects');
 
-// conn setup
-const connection = mysql.createConnection({
-    host     : 'localhost',
-    user     : 'root',
-    password : 'password',
-    database : 'promanager'
-});
-
-connection.connect((err) => {
-    if(err) { throw err }
-    console.log('Connected to db');
-});
+// conn setup 
+// should probably be abstracted into own module
 
 const app = express();
 
-// init/mount router
-app.use('/api', routes);
+// mount router 
+// all routes in the tasksRouter will be pre-pended with '/tasks' 
+app.use('/tasks', tasksRouter);
+
+// mount router 
+// all routes in the userRouter router will be pre-pended with '/users' 
+app.use('/users', userRouter);
+
+// mount router 
+// all routes in the proRouter router will be pre-pended with '/projects' 
+app.use('/projects', proRouter);
 
 // app.get('/', (req, res) => {
 //     res.send('Welcome to Pro-Manager');
