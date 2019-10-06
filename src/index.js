@@ -17,12 +17,12 @@ connection.connect((err) => {
 
 const app = express();
 
-// init router
+// init/mount router
 app.use('/api', routes);
 
-app.get('/', (req, res) => {
-    res.send('Welcome to Pro-Manager');
-});
+// app.get('/', (req, res) => {
+//     res.send('Welcome to Pro-Manager');
+// });
 
 app.listen('3000', () => {
     console.log('Pro-Manager back-end is live on port 3000!');

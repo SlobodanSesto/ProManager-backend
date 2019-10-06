@@ -1,9 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-// GET projects route
-router.get('/projects', (req, res) => {
-    res.send('/api/projects GET route');
+const taskController = require('../controllers/taskController');
+
+// GET tasks route
+router.get('/tasks', (req, res) => {
+    // res.send('/api/projects GET route');
+    return taskController.taskList(req, res);
 });
 
 // POST add project route
