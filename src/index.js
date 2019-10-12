@@ -2,23 +2,34 @@ const express       = require('express');
 const tasksRouter   = require('./routes/tasks');
 const userRouter    = require('./routes/users');
 const proRouter     = require('./routes/projects');
+const auth					= require('./routes/login');
 
 // conn setup 
 // should probably be abstracted into own module
 
 const app = express();
 
-// mount router 
-// all routes in the tasksRouter will be pre-pended with '/tasks' 
-app.use('/tasks', tasksRouter);
+// FIX FOR CORS ERROR
+app.use((req, res, next) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	next();
+});
 
 // mount router 
-// all routes in the userRouter router will be pre-pended with '/users' 
-app.use('/users', userRouter);
+// all routes in the auth will be pre-pended with '/api/auth' 
+app.use('/api/auth', auth);
 
 // mount router 
-// all routes in the proRouter router will be pre-pended with '/projects' 
-app.use('/projects', proRouter);
+// all routes in the tasksRouter will be pre-pended with '/api/tasks' 
+app.use('/api/tasks', tasksRouter);
+
+// mount router 
+// all routes in the userRouter router will be pre-pended with '/api/users' 
+app.use('/api/users', userRouter);
+
+// mount router 
+// all routes in the proRouter router will be pre-pended with '/api/projects' 
+app.use('/api/projects', proRouter);
 
 // app.get('/', (req, res) => {
 //     res.send('Welcome to Pro-Manager');
