@@ -4,12 +4,13 @@
   "description": "project task manager",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon index"
   },
   "author": "Slobodan Sesto",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "express-session": "^1.17.0",
     "mysql": "^2.17.1"
   }
 }
