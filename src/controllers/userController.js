@@ -30,8 +30,14 @@ exports.authUser = ((req, res) => {
 					// open session 
 					console.log("all good");
 					// send sid along with user info
+					console.log(req.sessionID)
+					let sid = req.session.id;
+					console.log(sid);
 					let data = {
-						"data": results,
+						"data": {
+							"results": results,
+							"sid": sid
+						},
 						"status": "OK"
 					};
 					res.send(data);
@@ -47,7 +53,7 @@ exports.authUser = ((req, res) => {
 			// 	if(error) { throw error };
 			// 	console.log('connection closed');
 			// });
-			
+
 		});
 	} else {
 		res.send('params missing');

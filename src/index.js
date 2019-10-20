@@ -1,14 +1,34 @@
 const express       = require('express');
+const db = require('./db');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+
+// Import routers
+const auth					= require('./routes/login');
 const tasksRouter   = require('./routes/tasks');
 const userRouter    = require('./routes/users');
 const proRouter     = require('./routes/projects');
-const auth			= require('./routes/login');
-const db = require('./db');
 
-// conn setup 
-// should probably be abstracted into own module
+const TWO_HOURS = 1000 * 60 * 60 * 2;
+const TEN_MIN = 1000 * 60 * 10;
+const {
+	PORT = 3000,
+	SESS_LIFETIME = TEN_MIN
+} = process.env;
 
 const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(session({
+	// genid: function(req) {
+	//   return genuuid() // use UUIDs for session IDs
+	// },
+	cookie: { maxAge: SESS_LIFETIME },
+	saveUninitialized: false,
+	resave: false,
+	secret: 'stig'
+}))
 
 // FIX FOR CORS ERROR
 app.use((req, res, next) => {
@@ -32,18 +52,10 @@ app.use('/api/users', userRouter);
 // all routes in the proRouter router will be pre-pended with '/api/projects' 
 app.use('/api/projects', proRouter);
 
-
-
 // app.get('/', (req, res) => {
 //     res.send('Welcome to Pro-Manager');
 // });
-// db.connect((err) => {
-// 	if (err) {
-// 		throw err;
-// 	};
-// 	console.log('connection opened');
-// });
 
-app.listen('3000', () => {
-    console.log('Pro-Manager back-end is live on port 3000!');
+app.listen( PORT || 3000 , () => {
+    console.log('Pro-Manager back-end is live on port '+PORT+'!');
 });
