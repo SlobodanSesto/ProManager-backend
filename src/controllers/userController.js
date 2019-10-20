@@ -11,12 +11,15 @@ exports.authUser = ((req, res) => {
 	let pass = req.query.pass || null;
 	// console.log(req.query.sid);
 	if(email && pass) {
-		db.connect((err) => {
-			if (err) {
-				throw err;
-			};
-			console.log('connection opened');
-		});
+		
+		// still not sure if i have to open/close conn every time or if node does it
+		// db.connect((err) => {
+		// 	if (err) {
+		// 		throw err;
+		// 	};
+		// 	console.log('connection opened');
+		// });
+
 		let sql = `SELECT * FROM users WHERE usr_email=?`;
 		db.query(sql, email, (err, results) => {
 			// console.log(results.length);
@@ -38,10 +41,13 @@ exports.authUser = ((req, res) => {
 			} else {
 				res.send('no results from db');
 			}
-			db.end((error) => {
-				if(error) { throw error };
-				console.log('connection closed');
-			});
+
+			// still not sure if i have to close conn every time or if node does it
+			// db.end((error) => {
+			// 	if(error) { throw error };
+			// 	console.log('connection closed');
+			// });
+			
 		});
 	} else {
 		res.send('params missing');

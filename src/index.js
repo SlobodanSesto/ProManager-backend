@@ -2,7 +2,8 @@ const express       = require('express');
 const tasksRouter   = require('./routes/tasks');
 const userRouter    = require('./routes/users');
 const proRouter     = require('./routes/projects');
-const auth					= require('./routes/login');
+const auth			= require('./routes/login');
+const db = require('./db');
 
 // conn setup 
 // should probably be abstracted into own module
@@ -31,8 +32,16 @@ app.use('/api/users', userRouter);
 // all routes in the proRouter router will be pre-pended with '/api/projects' 
 app.use('/api/projects', proRouter);
 
+
+
 // app.get('/', (req, res) => {
 //     res.send('Welcome to Pro-Manager');
+// });
+// db.connect((err) => {
+// 	if (err) {
+// 		throw err;
+// 	};
+// 	console.log('connection opened');
 // });
 
 app.listen('3000', () => {
