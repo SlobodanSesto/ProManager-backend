@@ -1,5 +1,5 @@
 const Project = require('../models/Project');
-const db = require('../db');
+// const db = require('../db');
 
 exports.getProject = ((req, res) => {
     // let project = new Project(1, 'First project', 'project description');

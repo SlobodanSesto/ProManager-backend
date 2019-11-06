@@ -1,61 +1,45 @@
 const User = require('../models/User');
+const jwt = require('jsonwebtoken');
 const db = require('../db');
 
-exports.getUser = ((req, res) => {
-	let u = new User(1, 'Bob Smith', 'email@email.com');
-	res.send(u);
-});
+// exports.getUser = ((req, res) => {
+// 	let u = new User(1, 'Bob Smith', 'email@email.com');
+// 	res.send(u);
+// });
 
 exports.authUser = ((req, res) => {
-	let email = req.query.email || null;
-	let pass = req.query.pass || null;
-	// console.log(req.query.sid);
+	let email = req.body.email || null;
+	let pass = req.body.pass || null;
 	if(email && pass) {
-		
-		// still not sure if i have to open/close conn every time or if node does it
-		// db.connect((err) => {
-		// 	if (err) {
-		// 		throw err;
-		// 	};
-		// 	console.log('connection opened');
-		// });
-
 		let sql = `SELECT * FROM users WHERE usr_email=?`;
 		db.query(sql, email, (err, results) => {
-			// console.log(results.length);
 			if(results && results.length > 0) {
 				// check pass
-				console.log(results[0].usr_password);
 				if(results[0].usr_password == pass) {
-					// open session 
-					console.log("all good");
-					// send sid along with user info
-					console.log(req.sessionID)
-					let sid = req.session.id;
-					console.log(sid);
-					let data = {
-						"data": {
-							"results": results,
-							"sid": sid
-						},
-						"status": "OK"
-					};
-					res.send(data);
+					const payload = {
+						id: results[0].usr_id, 
+						email: results[0].usr_email,
+						name: results[0].usr_name
+					}
+					// sign/issue token
+					jwt.sign(payload, process.env.SECRET, (err, token) => {
+						let data = {
+							"data": {
+								"user": payload,
+								"auth": token
+							},
+							"status": "OK"
+						};
+						res.send(data);
+					})
 				} else {
-					res.send('Wrong Pass');
+					res.sendStatus(403);
 				}
 			} else {
-				res.send('no results from db');
+				res.sendStatus(403);
 			}
-
-			// still not sure if i have to close conn every time or if node does it
-			// db.end((error) => {
-			// 	if(error) { throw error };
-			// 	console.log('connection closed');
-			// });
-
 		});
 	} else {
-		res.send('params missing');
+		res.sendStatus(400);
 	}
 });
