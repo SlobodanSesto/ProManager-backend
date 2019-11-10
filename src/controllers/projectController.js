@@ -7,7 +7,7 @@ exports.getProject = ((req, res) => {
     //     if(err) { throw err };
     //     console.log('connection to db opened');
     // });
-    // let sql = `SELECT * FROM projects`;
+    // let sql = `SELECT * FROM projects WHERE `;
     // db.query(sql, (err, results) => {
     //     console.log('making query');
     //     console.log(results.length);
